@@ -1,10 +1,30 @@
 from django.shortcuts import render
-from .serializers import CategorySerializers
+from .serializers import CategorySerializers,SmartphoneSerializer
 # Create your views here.
 from rest_framework.generics import ListAPIView
-from .models import Category
+from .models import Category,Smartphone
+
+from rest_framework.filters import SearchFilter
 
 class CategoryListAPiView(ListAPIView):
     serializer_class = CategorySerializers
     queryset = Category.objects.all()
 
+
+
+class SmartphoneListAPiVIew(ListAPIView):
+    serializer_class = SmartphoneSerializer
+    queryset = Smartphone.objects.all()
+
+    # переопраделеяем queryset
+    #
+    # def get_queryset(self):
+    #     qs=super().get_queryset()
+    #     price,title=self.request.query_params.get('price'),self.request.query_params.get('title')
+    #     search_params={'price__iexact':price,'title__iexact':title}
+    #     return qs.filter(**search_params)
+
+    # ?search=65000
+    # ?search=iphone1
+    filter_backends = [SearchFilter]
+    search_fields=['price','title']
