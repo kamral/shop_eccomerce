@@ -3,8 +3,21 @@ from django.contrib.auth import get_user_model
 User=get_user_model()
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.forms import ValidationError
+from PIL import Image
+
 
 # Create your models here.
+
+
+
+class MinResolutionErrorException(Exception):
+    pass
+
+class MaxResolutionErrorException(Exception):
+    pass
+
+
 
 class Category(models.Model):
     name=models.CharField(max_length=100,verbose_name='Имя категории')
@@ -15,6 +28,10 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    min_resolution = (400, 400)
+    max_resolution = (2400, 1200)
+    MAX_IMAGE_SIZE=31745
+
     class Meta:
         abstract=True
 
@@ -25,6 +42,15 @@ class Product(models.Model):
     image=models.ImageField(verbose_name='Изображение')
     price=models.PositiveIntegerField(null=True,blank=True)
 
+    def save(self, *args,**kwargs):
+        image=self.image
+        img=Image(open)
+        min_height, min_width = self.min_resolution
+        if img.height < min_height or img.width < min_width:
+            raise MinResolutionErrorException('Загруженное изображение меньше положенного')
+        max_height, max_width =self.max_resolution
+        if img.height > max_height or img.width > max_width:
+            raise MaxResolutionErrorException('Загруженное изображение выше положенного')
 
     def __str__(self):
         return self.title
