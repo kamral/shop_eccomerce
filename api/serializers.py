@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category,Smartphone
+from .models import Category,Smartphone,Customers
 
 
 class CategorySerializers(serializers.ModelSerializer):
@@ -42,5 +42,18 @@ class SmartphoneSerializer(BaseProductSerializer,serializers.ModelSerializer):
     main_camera = serializers.CharField(required=True)
 
     class Meta:
-        model=Smartphone
+
+        fields='__all__'
+
+
+class OrdersSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model=Customers
+        fields='__all__'
+
+class CustomersSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model=Customers
         fields='__all__'

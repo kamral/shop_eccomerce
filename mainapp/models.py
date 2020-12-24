@@ -30,7 +30,7 @@ class Category(models.Model):
 class Product(models.Model):
     min_resolution = (400, 400)
     max_resolution = (2400, 1200)
-    MAX_IMAGE_SIZE=31745
+    MAX_IMAGE_SIZE=3174534
 
     class Meta:
         abstract=True
@@ -44,13 +44,13 @@ class Product(models.Model):
 
     def save(self, *args,**kwargs):
         image=self.image
-        img=Image(open)
+        img=Image.open(image)
         min_height, min_width = self.min_resolution
+        max_height, max_width = self.max_resolution
         if img.height < min_height or img.width < min_width:
             raise MinResolutionErrorException('Загруженное изображение меньше положенного')
-        max_height, max_width =self.max_resolution
-        if img.height > max_height or img.width > max_width:
-            raise MaxResolutionErrorException('Загруженное изображение выше положенного')
+        # if img.height > max_height or img.width > max_width:
+        #     raise MaxResolutionErrorException('Загруженное изображение выше положенного')
 
     def __str__(self):
         return self.title

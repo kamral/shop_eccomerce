@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.contrib.auth import get_user_model
+User=get_user_model()
 # Create your models here.
 from django.urls import reverse
 
@@ -48,4 +49,15 @@ class Smartphone(Product):
 
     def __str__(self):
         return "{} {}".format(self.category.name, self.title)
+
+
+class Customers(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    phone=models.CharField(max_length=100)
+    address=models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return "Покупатель {} {}".format(self.user.first_name,
+                                         self.user.last_name)
 

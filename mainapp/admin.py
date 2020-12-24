@@ -8,6 +8,9 @@ from PIL import Image
 # ограничения загрузки по размеру
 class NotebookAdminForm(ModelForm):
 
+    min_resolution = (400, 400)
+    max_resolution = (1000, 800)
+
 
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -22,7 +25,7 @@ class NotebookAdminForm(ModelForm):
         max_height, max_width = Product.max_resolution
         if image.size > Product.MAX_IMAGE_SIZE:
             raise ValidationError('Размер загружаемого файла больше 3мб')
-        if img.height <min_height or img.width < min_width:
+        if img.height < min_height or img.width < min_width:
             raise ValidationError('Загруженное изображение меньше положенного')
         if img.height > max_height or img.width > max_width:
             raise ValidationError('Загруженное изображение выше положенного')
